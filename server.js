@@ -9,6 +9,10 @@ const client = new pg.Client(
 
 const PORT = process.env.PORT || 3000;
 
+app.use((error, req, res, next) => {
+  res.status(res.status || 500).send({ error: error });
+});
+
 app.get("/api/employees", async (req, res, next) => {
   try {
     const SQL = `SELECT * from employees`;
@@ -102,6 +106,7 @@ const init = async () => {
     INSERT INTO employees(name, department_id) values('BETTY', (SELECT id from departments WHERE department='FRUITS'));
     INSERT INTO employees(name, department_id) values('NISHANT', (SELECT id from departments WHERE department='FROZEN'));
     INSERT INTO employees(name, department_id) values('ARIANE', (SELECT id from departments WHERE department='VEGGIES'));
+    INSERT INTO employees(name, department_id) values('MARIA', (SELECT id from departments WHERE department='BREAD'));
   `;
 
   await client.query(SQL);
